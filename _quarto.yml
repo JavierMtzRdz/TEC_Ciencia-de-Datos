@@ -6,7 +6,7 @@ website:
   navbar:
     right:
       - text: Github
-        url: https://github.com/JavierMtzRdz/stat251_lab-presentations
+        url: https://github.com/JavierMtzRdz/TEC_Ciencia-de-Datos
         icon: github
 
 format:
