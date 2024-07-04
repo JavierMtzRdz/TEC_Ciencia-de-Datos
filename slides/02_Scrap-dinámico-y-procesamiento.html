@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>02 Web scraping dinámico y procedimiento de datos</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=" Javier Martínez Rodríguez" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"f65daa041b93474186297642d1057deb","expires":14}</script>
+    <script src="libs/himalaya/himalaya.js"></script>
+    <script src="libs/js-cookie/js.cookie.js"></script>
+    <link href="libs/editable/editable.css" rel="stylesheet" />
+    <script src="libs/editable/editable.js"></script>
+    <link href="libs/js4shiny/css/_variables-fonts.css" rel="stylesheet" />
+    <link href="libs/js4shiny/css/_variables.css" rel="stylesheet" />
+    <link href="libs/js4shiny/css/code.css" rel="stylesheet" />
+    <link href="libs/js4shiny/jsonview/jsonview.css" rel="stylesheet" />
+    <script src="libs/js4shiny/jsonview/jsonview.min.js"></script>
+    <link href="libs/js4shiny-redirectConsoleLog/jslog.css" rel="stylesheet" />
+    <script src="libs/js4shiny-redirectConsoleLog/redirectConsoleLog.js"></script>
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="Mi-tema.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle right hide-count
+background-image: url(06_imagenes/Identidad-gráfica/Portada-MCCI.png)
+background-size: cover
+
+
+
+
+
+## **&lt;span style='color:#e6e6e6'&gt;&lt;p&gt;Ejemplos prácticos de web scraping &lt;br&gt;dinámica y otros usos del menejo de texto&lt;/p&gt;&lt;/span&gt;**
+
+## &lt;span style='color:#bfbfbf'&gt; Javier Mtz&lt;/span&gt;
+
+---
+layout: true
+
+background-image: url(06_imagenes/Identidad-gráfica/Pagina-MCCI.png)
+background-size: cover
+## ¿Qué vamos a ver?
+---
+
+
+--
+**Proceso de análisis** 
+
+![](06_imagenes/Proceso/Proceso análisis.png)
+---
+
+**Proceso de análisis** 
+
+![](06_imagenes/Proceso/Proceso análisis 2.png)
+
+---
+
+**Proceso de análisis** 
+
+![](06_imagenes/Proceso/Proceso análisis 3-b.png)
+---
+
+**Proceso de análisis** 
+
+![](06_imagenes/Proceso/Proceso análisis 4.png)
+
+
+---
+layout: false
+class: middle center hide-count
+background-image: url(06_imagenes/Identidad-gráfica/Portada-MCCI.png)
+background-size: cover
+# **&lt;span style='color:#e6e6e6'&gt;&lt;p&gt;Análisis de documentos de CompraNet&lt;/p&gt;&lt;/span&gt;**
+
+---
+layout: true
+
+background-image: url(06_imagenes/Identidad-gráfica/Pagina-MCCI.png)
+background-size: cover
+## **Análisis de documentos de CompraNet**
+---
+
+### Objetivo:
+--
+
+* Ampliar la información disponible de contrataciones públicas. 
+
+---
+
+### Objetivo:
+
+Yo intentando hacer un análisis con datos públicos:
+![](06_imagenes/meme-datos.jpeg)
+
+---
+
+### Objetivo:
+
+
+* Ampliar la información disponible de contrataciones públicas. 
+
+
+* Mapear información documentos e información disponible de CompraNet.
+--
+
+
+* Análisis de texto de documentos relevantes. 
+
+
+---
+
+### Identificación de fuentes de información
+
+.pull-left[
+* compranet.hacienda.gob.mx
+![](06_imagenes/Compranet.png)
+]
+
+.pull-right[
+* Expedientes de CompraNet
+![](06_imagenes/Compranet expediente.png)
+]
+
+---
+
+### ¿Qué queremos extraer de la página?
+
+.pull-left[
+
+]
+
+.pull-right[
+![](06_imagenes/Compranet.png)
+]
+
+---
+
+### ¿Qué queremos extraer de la página?
+
+.pull-left[
+* Registros y links de expedientes
+]
+
+.pull-right[
+![](06_imagenes/Compranet-2.png)
+]
+
+---
+
+### ¿Qué queremos extraer de la página?
+
+.pull-left[
+* Registros y links de expedientes
+
+
+* Detalles del expediente
+]
+
+.pull-right[
+![](06_imagenes/Compranet expediente-2.png)
+]
+
+---
+
+### ¿Qué queremos extraer de la página?
+
+.pull-left[
+* Registros y links de expedientes
+
+
+* Detalles del expediente
+
+
+* Datos generales y anexos
+]
+
+.pull-right[
+![](06_imagenes/Compranet expediente-3.png)
+]
+
+---
+
+### ¿Qué queremos extraer de la página?
+
+.pull-left[
+* Registros y links de expedientes
+
+
+* Detalles del expediente
+
+
+* Datos generales y anexos
+
+
+* Anexos adicionales
+]
+
+.pull-right[
+![](06_imagenes/Compranet expediente-4.png)
+]
+
+---
+
+### Dificultades:
+
+--
+
+#### 1. Extraer información de una página dinámica
+--
+
+#### 2. Establecer procedimiento de consulta
+
+
+---
+
+### Extraer información de una página dinámica
+--
+
+
+* A diferencia de las páginas estáticas, éstas reaccionan ante la información y acciones que realicemos.
+--
+
+
+* Estas páginas necesitan de nuestras _respuestas_ para funcionar. Por tanto, cada visitante puede ver diferente información.
+--
+
+
+* Muchas de estas páginas generan información posteriormente a que cargó. 
+
+
+---
+
+###  Extraer información de una página dinámica y procedimiento de consulta
+
+#### ¿Qué pasa con CompraNet si tratamos de analizar una página como si fuera estática?
+--
+
+
+```r
+library(rvest)
+
+read_html("https://compranet.hacienda.gob.mx/esop/toolkit/opportunity/ns/1795310/detail.si?isOnModification=false&amp;_ncp=1629966548970.111568-2") %&gt;% 
+  html_table()
+```
+
+```
+## Error in open.connection(x, "rb"): HTTP error 401.
+```
+--
+
+*HTTP 401:* indica que la petición ( _request_ ) no ha sido ejecutada porque carece de credenciales válidas de autenticación para el recurso solicitado.
+
+
+---
+
+###  Extraer información de una página dinámica y procedimiento de consulta
+
+#### ¿Qué podemos hacer al respecto?
+--
+
+Usar `{RSelenium}` en tres pasos:
+
+1. Crear el procedimiento de análisis de la página dinámica. 
+
+2. Obtener el código fuente en R.
+
+3. Seleccione la información exacta necesaria del código fuente.
+
+---
+
+###  Extraer información de una página dinámica y procedimiento de consulta
+
+#### ¿Qué podemos hacer al respecto?
+
+Usar `{RSelenium}` 
+
+* Acceso a varios recursos.
+
+* Selenium utiliza métodos y no sólo funciones.
+
+* Permite interactuar con el navegador y los elementos de la página al mismo tiempo. 
+
+---
+
+
+###  ¿Cómo vamos a mapear la información de los expedientes?
+--
+
+#### 1. Preparar navegador
+--
+
+#### 2. Establecer procedimiento para consultar cada expediente
+--
+
+#### 3. Extraer la información del expediente seleccionado
+--
+
+#### 4. Repetir procedimiento para demas expedientes
+--
+
+#### 5. Descargar y procesar documentos
+
+---
+
+### 1. Preparar navegador
+--
+
+
+
+* [Prepara contenedor de Dockers para evitar problemas de Selenium](https://cran.r-project.org/web/packages/RSelenium/vignettes/docker.html)
+--
+
+
+
+* [Qué es y por qué usar Dockers](https://colinfay.me/docker-r-reproducibility/)
+--
+
+
+
+* [Seleccionar _drivers_ necesarios](https://levelup.gitconnected.com/web-scraping-with-r-part-2-dynamic-webpages-de620a161671)
+
+---
+
+### 1. Preparar navegador
+--
+
+Establecer perfil
+
+```r
+firefox_profile.me &lt;- makeFirefoxProfile(list(browser.download.dir = normalizePath([carpeta_contratos]),
+                                              browser.helperApps.neverAsk.openFile = [tipos de documentos],
+                                              browser.helperApps.neverAsk.saveToDisk = [tipos de documentos]))
+```
+
+
+---
+
+### 1. Preparar navegador
+--
+
+Crear y lanzar driver remoto
+
+* `rsDriver` inicia un server y a partir de él podemos utilizar el navegador. 
+
+* Cuidar que el _port_ coincida con el contenedor y no iniciar dos servers en el mismo. 
+
+
+```r
+driver &lt;- rsDriver(browser = "firefox",
+*                     port = 491L,
+                      extraCapabilities = firefox_profile.me)
+
+browser &lt;- driver[["client"]]
+server &lt;- driver[["server"]]
+```
+
+---
+
+### 1. Preparar navegador
+
+.pull-left[
+* Cómo resultado, se abrirá un navegador (este no será observable si lo creamos en un contenedor de Dockers)
+
+* Se creará un objeto llamado _driver_.
+
+]
+
+.pull-right[
+![](06_imagenes/Selenium-Firefox-Browser.png)
+]
+
+
+---
+
+### 1. Preparar navegador
+
+Para utilizar el navegador podemos aplicarle métodos. 
+
+
+```r
+browser$metodo()
+```
+
+Algunos métodos:
+* `browser$navigate("https://pagina.com")`: sirve para abrir la página establecida.
+
+* `browser$goBack()`: regresar a la página anterior.
+
+* `browser$goForward()`: ir a la siguiente página.
+
+---
+
+### 1. Preparar navegador
+
+Algunos métodos:
+
+* `browser$refresh()`: volver a cargar página.
+
+* `browser$CurrentUrl()`: obtener la url de la página.
+
+* `browser$close()`: cerrar navegador.
+
+* `browser$getPageSource()[[1]]`: obtener la página fuente.
+
+  * Este método regresa una lista. El primer elemento es el xml de la página `[[1]]`
+
+---
+
+### 1. Preparar navegador
+
+Algunos métodos:
+
+* `browser$findElement(using = selector, value)`: encontrar ubicación de elemento.
+
+  * El selector puede ser xpath, css, id, name, link text.
+  
+
+```r
+icono &lt;- browser$findElement(using = selector, value)
+```
+
+* `icono$clickElement()`: este método permite hacer click sobre el elemento previamente seleccionado. 
+
+---
+
+### 2. Establecer procedimiento para consultar expediente
+
+
+
+```r
+browser$navigate("https://compranet.hacienda.gob.mx/esop/guest/go/public/opportunity/past?locale=es_MX")
+
+pagina_actual &lt;- read_html(browser$getPageSource()[[1]]) 
+
+tabla_expedientes &lt;- pagina_actual %&gt;% 
+        html_table()
+
+exp &lt;- browser$findElement(using = "partial link text",
+                             tabla_expedientes[1,4])
+      
+exp$clickElement()
+```
+---
+
+### 2. Establecer procedimiento para consultar expediente
+
+
+```r
+tabla_expedientes 
+```
+
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Número de Fila &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Columna de Icono &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Nombre de la Unidad Compradora (UC) &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Referencia del Expediente &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Descripción del Expediente &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Tipo de Contratación &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Plazo de participación o vigencia del anuncio &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; MICH-Arteaga-Dirección de Programación y Presupuesto #816010744 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAAM-CONTRATO-FORFIN-06-2017 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; CONSTRUCCION DE COLECTOR MARGINAL DE AGUAS NEGRAS Y LAGUNAS FACULTATIVAS, ANAERO &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Obra Pública &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31/08/2021 00:00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; SEDENA-Subdireccion de Adquisiciones #007000999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; LA-007000999-E840-2021 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; SV. MANTO.AEROGENERADORES PARQUE EOLICO SDN 2/a. VUELTA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Servicios &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31/08/2021 00:00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; MEX-Universidad Intercultural del Estado de México-Dirección de Administración y Finanzas #915110916 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 210C2601080003L/ICTP/002/2021 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ADQUISICION DE  MATERIALES Y UTILES DE OFICINA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adquisiciones &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31/08/2021 00:00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; JAL-Secretaría de Salud-Servicios de Salud Jalisco #914010985 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; IA-914010985-E34-2021 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; MEDICAMENTOS PARA LAS UNIDADES MÉDICAS DEL O.P.D SERVICIOS DE SALUD JALISCO &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adquisiciones &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31/08/2021 00:00 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+### 3. Extraer la información del expediente seleccionado
+--
+
+
+```r
+expediente_actual &lt;- read_html(browser$getPageSource()[[1]]) 
+
+tablas_exp &lt;- expediente_actual %&gt;% 
+    html_table()
+  
+texto &lt;- expediente_actual %&gt;% 
+    html_nodes(".form_container:nth-child(9) ul") %&gt;% 
+    html_text() %&gt;% 
+    str_remove_all("\t")
+
+datos_exp &lt;- texto %&gt;% 
+  str_split("\n") %&gt;% 
+  .[[1]] %&gt;% 
+  .[str_detect(., "")]
+
+datos_exp &lt;- tibble(categoria = datos_exp[!((1:length(datos_exp) %% 2) == 0)],
+       informacion = datos_exp[(1:length(datos_exp) %% 2) == 0])
+
+datos_exp
+```
+
+
+---
+
+### 3. Extraer la información del expediente seleccionado
+
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; categoria &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; informacion &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Código del Expediente &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2053203 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Descripción del Expediente &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA-050GYR031-E29-2020 ADQ. DE MEDICAMENTO, MAT DE CURACIÓN Y LABORATORIO (RVP) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+### 3. Extraer la información del expediente seleccionado
+--
+
+
+```r
+scrap_docs &lt;- map_df(tablas_exp,
+                       function(x){
+         x %&gt;% clean_names() %&gt;% 
+           {if(any(str_detect(names(.), "datos_generales_del_procedimiento"))){
+             rename(., datos_generales = contains("datos_generales")) %&gt;% 
+               mutate(comienza_anexo = str_detect(str_to_upper(datos_generales1), "ANEXOS"),
+                      comienza_anexo_num = cumsum(comienza_anexo)) %&gt;% 
+               filter(comienza_anexo_num &gt; 0) %&gt;% filter(row_number() &gt; 2) %&gt;% 
+               transmute(categoria = datos_generales2,nombre_archivo = str_replace_all(datos_generales4, "\\)[^_]*", "\\)"))} else .} %&gt;% 
+           {if(any(str_detect(names(.), "nombre_del_archivo"))){
+             rename(., nombre_archivo = contains("nombre"),
+                    categoria = contains("descripcion")) %&gt;% 
+               select(nombre_archivo, categoria) } else .} %&gt;% 
+           add_column(., !!!c(nombre_archivo = NA_real_, categoria = NA_real_)[setdiff(names(c(nombre_archivo = NA_real_, categoria = NA_real_)), names(.))]) %&gt;% 
+           mutate(nombre_archivo = as.character(nombre_archivo), categoria = as.character(categoria)) %&gt;% 
+           select(nombre_archivo, categoria) %&gt;% 
+           filter(!is.na(nombre_archivo) &amp; !is.na(categoria))
+                       })
+
+scrap_docs
+```
+
+---
+
+### 3. Extraer la información del expediente seleccionado
+
+
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; nombre_archivo &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; categoria &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (sin archivo adjunto) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datos relevantes de contrato &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; DP-050GYR031-E29-2020.pdf  (44 KB) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Escrito de justificación de la excepción a la licitación pública, cuando aplique &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (sin archivo adjunto) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Testimonio del Testigo Social, si el procedimiento contó con el &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (sin archivo adjunto) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Documento de autorización de subcontratación &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; AA-050GYR031-E29-2020.doc  (456 KB) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; CONVOCATORIA &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+#### 4. Repetir procedimiento para demas expedientes
+
+
+```r
+extraccion_expediente &lt;- function(referencia_del_expediente) {
+  # Entrar a la página del expediente
+  # Extraer información del expediente
+  # Crear dataframe de documentos
+  # Cruzar información en un dataframe
+}
+
+for (ref_exp in tabla_expedientes$`Referencia del Expediente`) {
+  extraccion_expediente(ref_exp)
+}
+
+new_page &lt;- try(browser$findElement(using = "class", ".NavBtnForward"),
+                        silent = T)
+
+while (new_page != "try-error") {
+  for (ref_exp in tabla_expedientes$`Referencia del Expediente`) {
+  extraccion_expediente(ref_exp)
+  }
+  
+  new_page &lt;- try(browser$findElement(using = "class", ".NavBtnForward"),
+                        silent = T)
+  
+}
+```
+
+---
+
+#### 4. Repetir procedimiento para demas expedientes
+
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; num_exp &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; url_exp &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; nombre_archivo &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; categoria &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2161649 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; https://compranet.hacienda.gob.mx/esop/guest/go/opportunity/detail?opportunityId=1891257 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; TM-TRAMO4 20-Ol-04 DR.pdf  (143 KB) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datos relevantes de contrato &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2161649 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; https://compranet.hacienda.gob.mx/esop/guest/go/opportunity/detail?opportunityId=1891257 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (sin archivo adjunto) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Escrito de justificación de la excepción a la licitación pública, cuando aplique &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2161649 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; https://compranet.hacienda.gob.mx/esop/guest/go/opportunity/detail?opportunityId=1891257 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Testimonio Final AO-021W3N003-E229-2020....  (833 KB) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Testimonio del Testigo Social, si el procedimiento contó con el &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2161649 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; https://compranet.hacienda.gob.mx/esop/guest/go/opportunity/detail?opportunityId=1891257 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (sin archivo adjunto) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Documento de autorización de subcontratación &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2161649 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; https://compranet.hacienda.gob.mx/esop/guest/go/opportunity/detail?opportunityId=1891257 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Testimonio Tramo 4.pdf  (833 KB) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; TESTIMONIO TESTIGO SOCIAL &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+#### 5. Descargar y procesar documentos
+
+
+```r
+extraccion_expediente &lt;- function(referencia_del_expediente) {
+  # Entrar a la página del expediente
+  # Extraer información del expediente
+  # Crear dataframe de documentos
+  # Cruzar información en un dataframe
+  
+  docs_descarga &lt;- scrap_docs$nombre_archivo %&gt;% 
+    .[!str_detect(., "(sin archivo adjunto)")]
+  
+  for (doc in docs_descarga) {
+    
+    ub_doc &lt;- try(driver$findElement(using = "partial link text", doc),
+               silent = T)
+    
+    ub_doc$clickElement()
+    
+*   Sys.sleep(5)  
+  }
+}
+
+pdftools::pdf_text(pdf = [Ubicacion])
+```
+
+
+---
+layout: false
+class: middle center hide-count
+background-image: url(06_imagenes/Identidad-gráfica/Portada-MCCI.png)
+background-size: cover
+
+# **&lt;span style='color:#e6e6e6'&gt;&lt;p&gt;Gracias&lt;/p&gt;&lt;/span&gt;**
+
+---
+layout: false
+class: middle center hide-count
+background-image: url(06_imagenes/Identidad-gráfica/Portada-MCCI.png)
+background-size: cover
+
+# **&lt;span style='color:#e6e6e6'&gt;&lt;p&gt;---&lt;/p&gt;&lt;/span&gt;**
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

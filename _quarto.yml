@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "STAT 251-Lab presentations"
+  navbar:
+    right:
+      - text: Github
+        url: https://github.com/JavierMtzRdz/stat251_lab-presentations
+        icon: github
+
+format:
+  html:
+    theme: cosmo
+    css: slides/frmt/theme.css
+    toc: true
+
+include-in-header: # Correct when needed
+  - text: |
+     <link rel = "shortcut icon" href = "https://raw.githubusercontent.com/JavierMtzRdz/JavierMtzRdz.github.io/gh-pages/assets/img/logo.ico" /> 
+
+
