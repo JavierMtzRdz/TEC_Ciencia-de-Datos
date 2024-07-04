@@ -6,7 +6,7 @@ about:
 image: slides/06_imagenes/Identidad-grafica/LogoMCCI.png
 ---
 
-Este repositorio contiene algunas de las presentaciones usadas en la clase Data Science para la toma de decisiones II del Tec de Monterrey para el semestre de Otoño de 2021 en el que el equipo de UIA de MCCI participó como socio formador.
+Este repositorio contiene algunas de las presentaciones usadas en la clase _Data Science para la toma de decisiones II_ del Tec de Monterrey para el semestre de Otoño de 2021 en el que el equipo de UIA de MCCI participó como socio formador.
 
 
 -  [Sesión 01: Ejemplos prácticos de web scraping y limpieza de datos](https://javiermtzrdz.github.io/TEC_Ciencia-de-Datos/slides/01_Scrap-y-procesamiento)

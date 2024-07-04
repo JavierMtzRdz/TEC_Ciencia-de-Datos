@@ -7,7 +7,7 @@
 <!-- badges: end -->
 
 Este repositorio contiene algunas de las presentaciones usadas en la
-clase Data Science para la toma de decisiones II del Tec de Monterrey
+clase *Data Science para la toma de decisiones II* del Tec de Monterrey
 para el semestre de Otoño de 2021 en el que el equipo de UIA de MCCI
 participó como socio formador.
 
