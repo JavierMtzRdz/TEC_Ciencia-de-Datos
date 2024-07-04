@@ -14,6 +14,6 @@ participó como socio formador.
 - [Sesión 01: Ejemplos prácticos de web scraping y limpieza de
   datos](https://javiermtzrdz.github.io/TEC_Ciencia-de-Datos/slides/01_Scrap-y-procesamiento)
 
-- [Sesión 02: Ejemplos prácticos de web scraping dinámica y otros usos
+- [Sesión 02: Ejemplos prácticos de web scraping dinamica y otros usos
   del menejo de
   texto](https://javiermtzrdz.github.io/TEC_Ciencia-de-Datos/slides/02_Scrap-dinámico-y-procesamiento)

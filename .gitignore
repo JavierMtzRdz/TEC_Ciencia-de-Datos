@@ -288,7 +288,7 @@ TSWLatexianTemp*
 # User-specific files
 .Ruserdata
 .Rproj.user
-.Rprofile
+.Rprofileit -m
 
 # No document
 05_documentos/*
